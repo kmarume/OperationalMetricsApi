@@ -3,7 +3,7 @@ from app.schemas.metric import MetricCreate, MetricResponse
 from datetime import datetime, timezone
 from app.services import metrics_service
 
-router = APIRouter(prefix="/metrics", tags=["Metrics"])
+router = APIRouter()
 
 @router.post("/", response_model=MetricResponse)
 def create_metric(metric: MetricCreate):

@@ -1,11 +1,14 @@
 from fastapi import FastAPI
-from app.api import health, metrics
 
-app = FastAPI()
+from app.database import Base, engine
+from app.api.health import router as health_router
+from app.api.metrics import router as metrics_router
 
-app.include_router(health.router)
-app.include_router(metrics.router)
+app = FastAPI(title="Operational Metrics API")
 
-@app.get("/")
-def greet():
-    return "test"
+# Create database tables
+Base.metadata.create_all(bind=engine)
+
+# Register routers
+app.include_router(health_router, prefix="/health", tags=["Health"])
+app.include_router(metrics_router, prefix="/metrics", tags=["Metrics"])
